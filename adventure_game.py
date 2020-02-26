@@ -1,24 +1,23 @@
-# data
-locations = {0: "You are sitting in front of a computer learning Python",
-             1: "You are standing at the end of a road before a small brick building",
-             2: "You are at the top of a hill",
-             3: "You are inside a building, a well house for a small stream",
-             4: "You are in a valley beside a stream",
-             5: "You are in the forest"}
-
-exits = { 0: {"Q": 0},
-          1: {"W": 2, "E": 3, "N": 5, "S": 4, "Q": 0},
-          2: {"N": 5, "Q": 0},
-          3: {"W": 1, "Q": 0},
-          4: {"N": 1, "W": 2, "Q": 0},
-          5: {"W": 2, "S": 1, "Q": 0}}
-
-# used for location --> location movement, instead of directional input
-namedExits = { 1: {"2": 2, "3": 3, "5": 5, "4": 4},
-               2: {"5": 5},
-               3: {"1": 1},
-               4: {"1": 1, "2": 2},
-               5: {"2": 2, "1": 1} }
+# data -- refactored into a single dictionary
+locations = {0: {"desc": "You are sitting in front of a computer learning Python",
+                 "exits": {},
+                 "namedExits": {}},
+             1: {"desc": "You are standing at the end of a road before a small brick building",
+                 "exits": {"W": 2, "E": 3, "N": 5, "S": 4, "Q": 0},
+                 "namedExits": {"2": 2, "3": 3, "5": 5, "4": 4}},
+             2: {"desc": "You are at the top of a hill",
+                 "exits": {"N": 5, "Q": 0},
+                 "namedExits": {"5": 5}},
+             3: {"desc": "You are inside a building, a well house for a small stream",
+                 "exits": {"W": 1, "Q": 0},
+                 "namedExits": {"1": 1}},
+             4: {"desc": "You are in a valley beside a stream",
+                 "exits": {"N": 1, "W": 2, "Q": 0},
+                 "namedExits": {"1": 1, "2": 2}},
+             5: {"desc": "You are in the forest",
+                 "exits": {"W": 2, "S": 1, "Q": 0},
+                 "namedExits": {"2": 2, "1": 1}}
+            }
 
 # Use numbers for word versions of locations
 # This is done to map directions for location --> location, since
@@ -38,19 +37,20 @@ vocabulary = { "QUIT": "Q",
 loc = 1
 
 # game starts
+# refactored to utilize nested dictionaries
 while True:
     # creates available exits based on location
-    availableExits = ", ".join(exits[loc].keys())
+    availableExits = ", ".join(locations[loc]['exits'].keys())
     
-    print(locations[loc])
+    print(locations[loc]['desc'])
 
     # exit game, else combine both exits dictionaries
     if loc == 0:
         break
     else:
         # creates copy of the exits dictionary
-        allExits = exits[loc].copy()
-        allExits.update(namedExits[loc])
+        allExits = locations[loc]['exits'].copy()
+        allExits.update(locations[loc]['namedExits'])
     
     # provides available exits
     direction = input("Avaible exits are " + availableExits+ " ").upper()
