@@ -19,6 +19,13 @@ vocabulary = { "QUIT": "Q",
                "EAST": "E",
                "WEST": "W"}
 
+# split() is used to split strings
+# by default, split() splits at the space, unless a delimiter is
+# provided
+# print(locations[0].split())
+# print(locations[3].split(","))
+# print(' '.join(locations[0].split()))
+
 # default location
 loc = 1
 
@@ -39,9 +46,13 @@ while True:
 
     # Parse user input, using our vocabulary dictionary if necessary
     if len(direction) > 1:
-        for word in vocabulary:
-            if word in direction:
+        words = direction.split()
+        for word in words:
+            # will take the first word found in the user input, if in
+            # the vocabulary dictionary
+            if word in vocabulary:
                 direction = vocabulary[word]
+                break
 
     # check if directional key exists
     if direction in exits[loc]:
