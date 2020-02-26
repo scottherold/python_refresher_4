@@ -13,18 +13,26 @@ exits = { 0: {"Q": 0},
           4: {"N": 1, "W": 2, "Q": 0},
           5: {"W": 2, "S": 1, "Q": 0}}
 
+# used for location --> location movement, instead of directional input
+namedExits = { 1: {"2": 2, "3": 3, "5": 5, "4": 4},
+               2: {"5": 5},
+               3: {"1": 1},
+               4: {"1": 1, "2": 2},
+               5: {"2": 2, "1": 1} }
+
+# Use numbers for word versions of locations
+# This is done to map directions for location --> location, since
+# the location name may not always be in the same direction
 vocabulary = { "QUIT": "Q",
                "NORTH": "N",
                "SOUTH": "S",
                "EAST": "E",
-               "WEST": "W"}
-
-# split() is used to split strings
-# by default, split() splits at the space, unless a delimiter is
-# provided
-# print(locations[0].split())
-# print(locations[3].split(","))
-# print(' '.join(locations[0].split()))
+               "WEST": "W",
+               "ROAD": "1",
+               "HILL": "2",
+               "BUILDING": "3",
+               "VALLEY": "4",
+               "FOREST": "5"}
 
 # default location
 loc = 1
@@ -36,10 +44,14 @@ while True:
     
     print(locations[loc])
 
-    # exit game
+    # exit game, else combine both exits dictionaries
     if loc == 0:
         break
-
+    else:
+        # creates copy of the exits dictionary
+        allExits = exits[loc].copy()
+        allExits.update(namedExits[loc])
+    
     # provides available exits
     direction = input("Avaible exits are " + availableExits+ " ").upper()
     print()
@@ -55,7 +67,7 @@ while True:
                 break
 
     # check if directional key exists
-    if direction in exits[loc]:
-        loc = exits[loc][direction]
+    if direction in allExits:
+        loc = allExits[direction]
     else:
         print("You cannot go in that direction")
